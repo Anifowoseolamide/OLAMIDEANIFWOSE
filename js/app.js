@@ -10,6 +10,8 @@ import {
   renderProjectDetailTemplate
 } from './components.js';
 import { getCurrentLang, getLangDict } from './i18n.js';
+import { initInteractiveCLI } from './cli.js';
+import { initServerLogTicker } from './ticker.js';
 
 class PortfolioApp {
   constructor() {
@@ -30,6 +32,8 @@ class PortfolioApp {
     this.bindEvents();
     this.bindLangSwitcher();
     this.render();
+    initInteractiveCLI();
+    initServerLogTicker();
   }
 
   renderHeaderTelemetry() {

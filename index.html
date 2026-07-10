@@ -71,6 +71,15 @@
   <!-- Dynamic App Mount Point -->
   <main id="app"></main>
 
+  <!-- Floating Interactive CLI Drawer (#3) -->
+  <div id="cliModal" class="cli-modal" aria-hidden="true"></div>
+  <button id="cliTriggerBtn" class="cli-trigger-btn" aria-label="Open Interactive CLI Terminal">
+    <span>&gt;_</span> CLI
+  </button>
+
+  <!-- Live Server Log Ticker Dock (#4) -->
+  <div id="serverLogTicker" class="server-log-ticker"></div>
+
   <!-- Application Logic -->
   <script type="module" src="js/app.js"></script>
 </body>
