@@ -13,6 +13,8 @@ import {
   PROJECT_ORDER
 } from './data.js';
 
+import { getLangDict } from './i18n.js';
+
 export function renderPill(label, state = 'active') {
   return `<span class="pill pill-${state}"><span class="dot dot-${state}"></span>${label}</span>`;
 }
@@ -44,22 +46,22 @@ export function renderTelemetryBar() {
   `;
 }
 
-export function renderProjectFlagship(p) {
+export function renderProjectFlagship(p, t) {
   return `
     <a class="project-flagship fade-in" href="#/project/${p.slug}">
       <div class="flag-row">
-        <span class="flag-tag">★ FLAGSHIP SYSTEM ARCHITECTURE</span>
+        <span class="flag-tag">${t ? t.projects.flagshipBadge : '★ FLAGSHIP SYSTEM ARCHITECTURE'}</span>
         <span class="api-endpoint"><span class="api-method">${p.httpMethod || 'GET'}</span>${p.endpoint || '/api/v1/' + p.slug} • 200 OK</span>
       </div>
       <h3>${p.title} — ${p.subtitle}</h3>
       <p>${p.tagline}</p>
       <div class="card-tags">${renderTagList(p.tech.slice(0, 6))}</div>
-      <span class="card-link">Explore Architecture & Docs →</span>
+      <span class="card-link">${t ? t.projects.exploreCard : 'Explore Architecture & Docs →'}</span>
     </a>
   `;
 }
 
-export function renderProjectCard(p) {
+export function renderProjectCard(p, t) {
   return `
     <a class="project-card fade-in" href="#/project/${p.slug}" data-category="${p.category || 'All'}">
       <div class="project-card-top">
@@ -72,17 +74,17 @@ export function renderProjectCard(p) {
           ${p.gallery ? `<span class="tag" style="border-color:var(--accent); color:var(--accent)">📷 ${p.gallery.length} UI Previews</span>` : ''}
           ${renderTagList(p.tech.slice(0, 4))}
         </div>
-        <span class="card-link">View system details →</span>
+        <span class="card-link">${t ? t.projects.viewCard : 'View system details →'}</span>
       </div>
     </a>
   `;
 }
 
-export function renderSkillsSection() {
+export function renderSkillsSection(t) {
   return `
     <section id="skills" class="wrap">
-      <div class="eyebrow">~/skills <span class="cursor-blink"></span></div>
-      <h2 class="section-title">Backend Architecture & Tech Stack</h2>
+      <div class="eyebrow">${t ? t.skills.eyebrow : '~/skills'} <span class="cursor-blink"></span></div>
+      <h2 class="section-title">${t ? t.skills.title : 'Backend Architecture & Tech Stack'}</h2>
       <div class="skills-grid">
         ${SKILL_GROUPS.map(group => `
           <div class="skill-card">
@@ -95,11 +97,11 @@ export function renderSkillsSection() {
   `;
 }
 
-export function renderExperienceSection() {
+export function renderExperienceSection(t) {
   return `
     <section id="experience" class="wrap">
-      <div class="eyebrow">~/experience <span class="cursor-blink"></span></div>
-      <h2 class="section-title">Experience & Education</h2>
+      <div class="eyebrow">${t ? t.experience.eyebrow : '~/experience'} <span class="cursor-blink"></span></div>
+      <h2 class="section-title">${t ? t.experience.title : 'Experience & Education'}</h2>
       
       <div class="timeline" style="margin-bottom:44px;">
         ${EXPERIENCE.map(item => `
@@ -117,7 +119,7 @@ export function renderExperienceSection() {
         `).join('')}
       </div>
 
-      <div class="eyebrow" style="margin-top:40px;">~/education</div>
+      <div class="eyebrow" style="margin-top:40px;">${t ? t.experience.eduEyebrow : '~/education'}</div>
       <div class="timeline">
         ${EDUCATION.map(item => `
           <div class="t-item">
@@ -135,7 +137,8 @@ export function renderExperienceSection() {
   `;
 }
 
-export function renderHomeTemplate(activeFilter = 'All') {
+export function renderHomeTemplate(activeFilter = 'All', langCode = 'en') {
+  const t = getLangDict(langCode);
   const flagship = PROJECTS['lagoscp'];
   const restSlugs = PROJECT_ORDER.filter(slug => slug !== 'lagoscp');
   const restProjects = restSlugs.map(slug => PROJECTS[slug]);
@@ -149,26 +152,26 @@ export function renderHomeTemplate(activeFilter = 'All') {
       <div class="hero-eyebrow">~/home <span class="cursor-blink"></span></div>
       <h1 class="hero-name">${PROFILE.name}</h1>
       <p class="hero-role">
-        Backend developer focused on <strong>API design</strong> and <strong>scalable, transaction-safe systems</strong> — currently building at Ndara.ai.
+        ${t.hero.roleHeadline}
       </p>
       <div class="hero-pills">
-        ${renderPill(PROFILE.availability, 'active')}
-        ${renderPill('Lagos, Nigeria', 'complete')}
-        ${renderPill('API Design • PostgreSQL • Django REST', 'http200')}
+        ${renderPill(t.hero.pills[0], 'active')}
+        ${renderPill(t.hero.pills[1], 'complete')}
+        ${renderPill(t.hero.pills[2], 'http200')}
       </div>
       <div class="hero-actions">
-        <a class="btn btn-primary" href="#/project/lagoscp">Explore LagosCP Architecture →</a>
-        <a class="btn btn-ghost" href="#projects">All Systems</a>
-        <a class="btn btn-ghost" href="mailto:${PROFILE.email}">Email Me</a>
+        <a class="btn btn-primary" href="#/project/lagoscp">${t.hero.exploreFlagship}</a>
+        <a class="btn btn-ghost" href="#projects">${t.hero.allSystems}</a>
+        <a class="btn btn-ghost" href="mailto:${PROFILE.email}">${t.hero.emailMe}</a>
       </div>
     </section>
 
     <section id="about" class="wrap">
-      <div class="eyebrow">~/about</div>
-      <h2 class="section-title">About Me</h2>
+      <div class="eyebrow">${t.about.eyebrow}</div>
+      <h2 class="section-title">${t.about.title}</h2>
       <div class="about-grid">
         <div class="about-body">
-          ${PROFILE.aboutParagraphs.map(p => `<p>${p}</p>`).join('')}
+          ${t.about.paragraphs.map(p => `<p>${p}</p>`).join('')}
         </div>
         <div class="backend-terminal-card">
           <div class="terminal-header">
@@ -193,52 +196,52 @@ export function renderHomeTemplate(activeFilter = 'All') {
       </div>
     </section>
 
-    ${renderSkillsSection()}
+    ${renderSkillsSection(t)}
 
-    ${renderExperienceSection()}
+    ${renderExperienceSection(t)}
 
     <section id="projects" class="wrap">
       <div class="projects-header-row">
         <div>
-          <div class="eyebrow">~/projects <span class="cursor-blink"></span></div>
-          <h2 class="section-title">Engineered Systems & APIs</h2>
+          <div class="eyebrow">${t.projects.eyebrow} <span class="cursor-blink"></span></div>
+          <h2 class="section-title">${t.projects.title}</h2>
         </div>
         <div class="filter-pills" id="projectFilter">
-          <button class="filter-btn ${activeFilter === 'All' ? 'active' : ''}" data-filter="All">All Systems</button>
-          <button class="filter-btn ${activeFilter === 'Django REST' ? 'active' : ''}" data-filter="Django REST">Django REST</button>
-          <button class="filter-btn ${activeFilter === 'Django Fullstack' ? 'active' : ''}" data-filter="Django Fullstack">Fullstack CBT & Apps</button>
+          <button class="filter-btn ${activeFilter === 'All' ? 'active' : ''}" data-filter="All">${t.projects.filterAll}</button>
+          <button class="filter-btn ${activeFilter === 'Django REST' ? 'active' : ''}" data-filter="Django REST">${t.projects.filterRest}</button>
+          <button class="filter-btn ${activeFilter === 'Django Fullstack' ? 'active' : ''}" data-filter="Django Fullstack">${t.projects.filterFullstack}</button>
         </div>
       </div>
 
-      ${activeFilter === 'All' || activeFilter === 'Django REST' ? renderProjectFlagship(flagship) : ''}
+      ${activeFilter === 'All' || activeFilter === 'Django REST' ? renderProjectFlagship(flagship, t) : ''}
 
       <div class="project-grid" id="projectGrid">
-        ${filteredProjects.map(renderProjectCard).join('')}
+        ${filteredProjects.map(p => renderProjectCard(p, t)).join('')}
       </div>
     </section>
 
     <section id="contact" class="wrap">
-      <div class="eyebrow">~/contact <span class="cursor-blink"></span></div>
-      <h2 class="section-title">Get In Touch</h2>
+      <div class="eyebrow">${t.contact.eyebrow} <span class="cursor-blink"></span></div>
+      <h2 class="section-title">${t.contact.title}</h2>
       <div class="contact-row">
         <div class="contact-item">
-          <span>DIRECT EMAIL</span>
+          <span>${t.contact.directEmail}</span>
           <a href="mailto:${PROFILE.email}">${PROFILE.email}</a>
         </div>
         <div class="contact-item">
-          <span>TELEPHONE</span>
+          <span>${t.contact.telephone}</span>
           <p>${PROFILE.phone}</p>
         </div>
         <div class="contact-item">
-          <span>GITHUB ARCHIVES</span>
+          <span>${t.contact.githubArchives}</span>
           <a href="${PROFILE.github}" target="_blank" rel="noopener">github.com/Anifowoseolamide</a>
         </div>
       </div>
     </section>
 
     <footer class="wrap">
-      <span>© 2026 Anifowoshe Olamide — Backend Developer</span>
-      <span>Engineered with clean HTML/CSS/JS modularity & Django backend principles.</span>
+      <span>${t.footer.copyright}</span>
+      <span>${t.footer.tagline}</span>
     </footer>
   `;
 }
@@ -270,13 +273,14 @@ function renderDetailSectionHTML(s) {
   `;
 }
 
-export function renderProjectDetailTemplate(p) {
+export function renderProjectDetailTemplate(p, langCode = 'en') {
+  const t = getLangDict(langCode);
   const statusPill = p.status ? renderPill(p.status.label, p.status.cls) : '';
   const endpointPill = p.endpoint ? `<span class="pill pill-http200"><span class="dot dot-http200"></span>${p.httpMethod || 'GET'} ${p.endpoint}</span>` : '';
 
   return `
     <div class="wrap fade-in">
-      <a class="back-link" href="#projects">← Return to All Projects</a>
+      <a class="back-link" href="#projects">${t.detail.returnLink}</a>
       <div class="detail-head">
         <h1>${p.title} <span style="color:var(--text-faint); font-weight:400;">— ${p.subtitle}</span></h1>
         <p class="detail-tagline">${p.tagline}</p>
@@ -289,7 +293,7 @@ export function renderProjectDetailTemplate(p) {
 
       ${p.gallery ? `
         <div class="detail-section">
-          <h2>System Interface & Workflow Preview</h2>
+          <h2>${t.detail.systemPreviewTitle}</h2>
           <div class="project-gallery">
             ${p.gallery.map(img => `
               <div class="gallery-card">
@@ -308,18 +312,18 @@ export function renderProjectDetailTemplate(p) {
       ${p.sections.map(renderDetailSectionHTML).join('')}
 
       <div class="tech-block">
-        <h2>System Technology Stack</h2>
+        <h2>${t.detail.techStackTitle}</h2>
         <div class="tech-tags">${renderTagList(p.tech)}</div>
         <div class="detail-links">
-          ${p.github ? `<a class="btn btn-primary" href="${p.github}" target="_blank" rel="noopener">View Source on GitHub →</a>` : ''}
-          <a class="btn btn-ghost" href="#/">← Back to Home Overview</a>
+          ${p.github ? `<a class="btn btn-primary" href="${p.github}" target="_blank" rel="noopener">${t.detail.viewSource}</a>` : ''}
+          <a class="btn btn-ghost" href="#/">${t.detail.backToHome}</a>
         </div>
       </div>
     </div>
 
     <footer class="wrap">
-      <span>© 2026 Anifowoshe Olamide</span>
-      <span>Built with modular architecture.</span>
+      <span>${t.footer.copyright}</span>
+      <span>${t.footer.tagline}</span>
     </footer>
   `;
 }

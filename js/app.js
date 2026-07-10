@@ -1,6 +1,6 @@
 /**
  * OLAMIDE ANIFOWOSHE — PORTFOLIO APPLICATION LOGIC
- * Modular entry point handling routing, live telemetry, and interactions
+ * Modular entry point handling routing, live telemetry, and internationalization (i18n)
  */
 
 import { PROJECTS } from './data.js';
@@ -9,6 +9,7 @@ import {
   renderHomeTemplate,
   renderProjectDetailTemplate
 } from './components.js';
+import { getCurrentLang, getLangDict } from './i18n.js';
 
 class PortfolioApp {
   constructor() {
@@ -18,6 +19,7 @@ class PortfolioApp {
     this.navLinksEl = document.getElementById('navLinks');
     this.navToggleBtn = document.getElementById('navToggle');
     this.currentFilter = 'All';
+    this.currentLang = getCurrentLang();
 
     this.init();
   }
@@ -26,6 +28,7 @@ class PortfolioApp {
     this.renderHeaderTelemetry();
     this.startLiveClock();
     this.bindEvents();
+    this.bindLangSwitcher();
     this.render();
   }
 
@@ -48,20 +51,50 @@ class PortfolioApp {
     setInterval(updateClock, 1000);
   }
 
+  bindLangSwitcher() {
+    const langSelect = document.getElementById('langSelect');
+    if (langSelect) {
+      langSelect.value = this.currentLang;
+      langSelect.addEventListener('change', (e) => {
+        this.currentLang = e.target.value;
+        localStorage.setItem('portfolio_lang', this.currentLang);
+        this.render();
+      });
+    }
+  }
+
+  updateNavbarLabels() {
+    const t = getLangDict(this.currentLang);
+    if (this.navLinksEl) {
+      const links = this.navLinksEl.querySelectorAll('a[data-i18n]');
+      links.forEach(link => {
+        const key = link.getAttribute('data-i18n');
+        if (key && t.nav && t.nav[key]) {
+          link.textContent = t.nav[key];
+        }
+      });
+    }
+    const selectEl = document.getElementById('langSelect');
+    if (selectEl && selectEl.value !== this.currentLang) {
+      selectEl.value = this.currentLang;
+    }
+  }
+
   parseSlug() {
     const m = window.location.hash.match(/^#\/project\/([a-z]+)/);
     return m ? m[1] : null;
   }
 
   render() {
+    this.updateNavbarLabels();
     const slug = this.parseSlug();
 
     if (slug && PROJECTS[slug]) {
-      this.appEl.innerHTML = renderProjectDetailTemplate(PROJECTS[slug]);
+      this.appEl.innerHTML = renderProjectDetailTemplate(PROJECTS[slug], this.currentLang);
       document.title = `${PROJECTS[slug].title} — System Architecture & Details`;
       window.scrollTo(0, 0);
     } else {
-      this.appEl.innerHTML = renderHomeTemplate(this.currentFilter);
+      this.appEl.innerHTML = renderHomeTemplate(this.currentFilter, this.currentLang);
       document.title = 'Olamide Anifowoshe — Backend Developer';
 
       const h = window.location.hash.replace('#', '');
@@ -111,7 +144,7 @@ class PortfolioApp {
           const filterVal = e.currentTarget.getAttribute('data-filter');
           if (filterVal) {
             this.currentFilter = filterVal;
-            this.appEl.innerHTML = renderHomeTemplate(this.currentFilter);
+            this.appEl.innerHTML = renderHomeTemplate(this.currentFilter, this.currentLang);
             this.bindDynamicEvents();
           }
         });
