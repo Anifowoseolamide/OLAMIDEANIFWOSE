@@ -141,11 +141,16 @@ export function renderHomeTemplate(activeFilter = 'All', langCode = 'en') {
   const t = getLangDict(langCode);
   const flagship = PROJECTS['lagoscp'];
   const restSlugs = PROJECT_ORDER.filter(slug => slug !== 'lagoscp');
-  const restProjects = restSlugs.map(slug => PROJECTS[slug]);
+  const restProjects = restSlugs.map(slug => PROJECTS[slug]).filter(p => !p.inProgress);
+  const inProgressProjects = restSlugs.map(slug => PROJECTS[slug]).filter(p => p.inProgress);
 
   const filteredProjects = activeFilter === 'All' 
     ? restProjects 
     : restProjects.filter(p => p.category === activeFilter || p.tech.includes(activeFilter));
+
+  const filteredInProgress = activeFilter === 'All'
+    ? inProgressProjects
+    : inProgressProjects.filter(p => p.category === activeFilter || p.tech.includes(activeFilter));
 
   return `
     <section id="home-hero" class="wrap">
@@ -218,6 +223,18 @@ export function renderHomeTemplate(activeFilter = 'All', langCode = 'en') {
       <div class="project-grid" id="projectGrid">
         ${filteredProjects.map(p => renderProjectCard(p, t)).join('')}
       </div>
+
+      ${filteredInProgress.length > 0 ? `
+        <div class="projects-header-row" style="margin-top: 60px;">
+          <div>
+            <div class="eyebrow">~/in-progress <span class="cursor-blink"></span></div>
+            <h2 class="section-title">Systems in Development</h2>
+          </div>
+        </div>
+        <div class="project-grid">
+          ${filteredInProgress.map(p => renderProjectCard(p, t)).join('')}
+        </div>
+      ` : ''}
     </section>
 
     <section id="contact" class="wrap">

@@ -17,22 +17,33 @@ export function initInteractiveCLI() {
         <span class="terminal-dot"></span>
         <span class="terminal-dot"></span>
       </div>
-      <span>bash — olamide@backend-node: ~</span>
+      <span class="cli-window-title">bash — olamide@backend-node: ~</span>
       <button class="cli-close-btn" id="cliCloseBtn" aria-label="Close Terminal">✕</button>
     </div>
     <div class="cli-body" id="cliBody">
       <div class="cli-output-line system">ANIFOWOSHE OLAMIDE INTERACTIVE BACKEND SHELL v2026.4</div>
       <div class="cli-output-line system">Type <span style="color:var(--accent)">help</span> for available system commands or <span style="color:var(--accent)">cat resume.json</span> for full JSON profile.</div>
     </div>
+    <div class="cli-quick-commands" id="cliQuickCmds" aria-label="Quick CLI Commands">
+      <button class="cli-chip" data-cmd="help">help</button>
+      <button class="cli-chip" data-cmd="whoami">whoami</button>
+      <button class="cli-chip" data-cmd="skills">skills</button>
+      <button class="cli-chip" data-cmd="projects">projects</button>
+      <button class="cli-chip" data-cmd="cat resume.json">cat resume.json</button>
+      <button class="cli-chip" data-cmd="status">status</button>
+      <button class="cli-chip" data-cmd="contact">contact</button>
+      <button class="cli-chip" data-cmd="clear">clear</button>
+    </div>
     <div class="cli-input-row">
-      <span class="cli-prompt">olamide@backend-node: ~$</span>
-      <input type="text" class="cli-input" id="cliInput" autocomplete="off" spellcheck="false" placeholder="type 'help'..." />
+      <span class="cli-prompt"><span class="cli-prompt-user">olamide@backend-node:</span> ~$</span>
+      <input type="text" class="cli-input" id="cliInput" autocomplete="off" spellcheck="false" placeholder="type command..." />
     </div>
   `;
 
   const closeBtn = document.getElementById('cliCloseBtn');
   const bodyEl = document.getElementById('cliBody');
   const inputEl = document.getElementById('cliInput');
+  const quickCmdsEl = document.getElementById('cliQuickCmds');
 
   let isOpen = false;
   const history = [];
@@ -41,13 +52,21 @@ export function initInteractiveCLI() {
   const toggleModal = (forceOpen) => {
     isOpen = forceOpen !== undefined ? forceOpen : !isOpen;
     modalEl.classList.toggle('open', isOpen);
-    if (isOpen && inputEl) {
+    triggerBtn.classList.toggle('modal-open', isOpen);
+    modalEl.setAttribute('aria-hidden', !isOpen);
+    if (isOpen && inputEl && window.innerWidth > 768) {
       setTimeout(() => inputEl.focus(), 50);
     }
   };
 
   triggerBtn.addEventListener('click', () => toggleModal());
   if (closeBtn) closeBtn.addEventListener('click', () => toggleModal(false));
+
+  document.addEventListener('click', (e) => {
+    if (isOpen && !modalEl.contains(e.target) && !triggerBtn.contains(e.target)) {
+      toggleModal(false);
+    }
+  });
 
   // Global hotkey to open terminal (backtick / tilde or Ctrl+~)
   window.addEventListener('keydown', (e) => {
@@ -74,7 +93,7 @@ export function initInteractiveCLI() {
     const cmd = rawInput.trim();
     if (!cmd) return;
 
-    printLine(`<span style="color:var(--accent)">olamide@backend-node: ~$</span> ${cmd}`);
+    printLine(`<span style="color:var(--accent)"><span class="cli-prompt-user">olamide@backend-node:</span> ~$</span> ${cmd}`);
 
     const lower = cmd.toLowerCase();
 
@@ -174,6 +193,19 @@ export function initInteractiveCLI() {
           historyIdx = history.length;
           inputEl.value = '';
         }
+      }
+    });
+  }
+
+  if (quickCmdsEl) {
+    quickCmdsEl.addEventListener('click', (e) => {
+      const chip = e.target.closest('.cli-chip');
+      if (!chip) return;
+      const cmd = chip.getAttribute('data-cmd');
+      if (cmd) {
+        history.push(cmd);
+        historyIdx = history.length;
+        handleCommand(cmd);
       }
     });
   }

@@ -103,9 +103,57 @@ export const EDUCATION = [
   }
 ];
 
-export const PROJECT_ORDER = ['lagoscp', 'rideshare', 'tidal', 'petrollink', 'prephive', 'geekspace', 'dineease'];
+export const PROJECT_ORDER = ['lagoscp', 'synccare', 'rideshare', 'tidal', 'petrollink', 'prephive', 'geekspace', 'dineease'];
 
 export const PROJECTS = {
+  synccare: {
+    slug: 'synccare',
+    title: 'SyncCare',
+    subtitle: 'Hybrid AI Healthcare Platform',
+    tagline: 'An intelligent, local-first family healthcare platform providing personalized medical guidance and autonomous care coordination.',
+    flagship: false,
+    inProgress: true,
+    category: 'Django REST',
+    endpoint: '/api/ai/chat/',
+    httpMethod: 'POST',
+    status: { label: 'IN DEVELOPMENT', cls: 'pending' },
+    overview: `SyncCare is a hybrid, local-first, intelligent family healthcare platform built to provide personalized, culturally attuned medical guidance, report analysis, environmental advisories, and autonomous care coordination for African families.`,
+    gallery: [
+      { src: 'syncCarehomepage.png', caption: 'SyncCare Dashboard & Environmental Advisories' },
+      { src: 'syncCarefamilyprofilespage.png', caption: 'Centralized Family Profiles & Contextual Memory' },
+      { src: 'syncCareaiassistantpage.png', caption: 'Culturally Attuned AI Health Chat Assistant' },
+      { src: 'syncCaremedicalanalyzerpage.png', caption: 'Medical Report Analyzer' },
+      { src: 'syncCarereminderpage.png', caption: 'Autonomous Care Coordination & Reminders' }
+    ],
+    sections: [
+      {
+        h: 'Contextual Medical Memory',
+        p: 'An intelligent database that remembers each family member’s chronic conditions, allergies, and past lab reports so the AI reasons over precise history.',
+        items: [
+          'Automatically injects detailed family context into the system prompt',
+          'Eliminates the need for manual re-entry of medical history every session'
+        ]
+      },
+      {
+        h: 'Hybrid Online/Offline AI Inference',
+        p: 'Seamless fallback routing between cloud intelligence (Google Gemini) and local edge AI (Ollama).',
+        items: [
+          'Remains functional during internet dropouts via local on-device LLMs',
+          'Fast-fail availability checks to prevent UI hangs'
+        ]
+      },
+      {
+        h: 'Autonomous Medical Tool Execution',
+        p: 'Acts as an active care coordinator instead of a passive chatbot.',
+        items: [
+          'AI can autonomously trigger backend tools like creating reminders and logging vitals',
+          'Executes Python services directly from AI JSON payload outputs'
+        ]
+      }
+    ],
+    tech: ['React', 'TypeScript', 'Django', 'Django REST Framework', 'Google Gemini', 'Ollama'],
+    github: null
+  },
   rideshare: {
     slug: 'rideshare',
     title: 'RideShare',
