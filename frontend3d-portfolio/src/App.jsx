@@ -1,31 +1,85 @@
 import { useEffect, useRef, useState } from 'react';
-import { Canvas } from '@react-three/fiber';
+import { Canvas, useFrame } from '@react-three/fiber';
 import { Environment, useProgress } from '@react-three/drei';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import FloatingShapes from './canvas/FloatingShapes';
+import KoiCanvas from './canvas/BoidsCanvas';
 
 gsap.registerPlugin(ScrollTrigger);
 
+function SpinningTorus() {
+  const ref = useRef();
+  useFrame(() => {
+    if (ref.current) {
+      ref.current.rotation.x += 0.01;
+      ref.current.rotation.y += 0.02;
+    }
+  });
+  return (
+    <group ref={ref} rotation={[Math.PI / 4, Math.PI / 4, 0]}>
+      <mesh>
+        <torusGeometry args={[1, 0.3, 16, 32]} />
+        <meshBasicMaterial color="#0B0F19" />
+      </mesh>
+      <mesh>
+        <torusGeometry args={[1, 0.31, 16, 32]} />
+        <meshBasicMaterial color="#A4D152" wireframe transparent opacity={0.6} />
+      </mesh>
+    </group>
+  );
+}
+
 function LoadingScreen({ onLoaded }) {
   const { progress } = useProgress();
+  const [step, setStep] = useState(0); 
   const [hidden, setHidden] = useState(false);
+  
+  const [minTimeElapsed, setMinTimeElapsed] = useState(false);
+  useEffect(() => {
+    const t = setTimeout(() => setMinTimeElapsed(true), 1200);
+    return () => clearTimeout(t);
+  }, []);
 
   useEffect(() => {
-    if (progress === 100) {
-      // Add a slight delay before fading out
-      const t = setTimeout(() => {
+    let t;
+    if (step === 0) {
+      t = setTimeout(() => setStep(1), 300);
+    } else if (step === 1 && progress === 100 && minTimeElapsed) {
+      setStep(2);
+    } else if (step === 2) {
+      t = setTimeout(() => setStep(3), 500);
+    } else if (step === 3) {
+      t = setTimeout(() => {
         setHidden(true);
-        setTimeout(onLoaded, 1000); // Wait for fade transition
-      }, 800);
-      return () => clearTimeout(t);
+        setTimeout(onLoaded, 1000); // Wait for transition
+      }, 1000);
     }
-  }, [progress, onLoaded]);
+    return () => clearTimeout(t);
+  }, [step, progress, minTimeElapsed, onLoaded]);
+
+  const bars = Math.floor(progress / 10);
+  const progressBar = '[' + '■'.repeat(bars) + '□'.repeat(10 - bars) + ']';
 
   return (
-    <div className={`loader-overlay ${hidden ? 'hidden' : ''}`}>
-      <div className="gear-container">⚙️</div>
-      <div className="loader-text">Loading Olamide Archive... {Math.round(progress)}%</div>
+    <div className={`loader-overlay ${hidden ? 'hidden-up' : ''}`}>
+      <div className="loader-bg-stars" />
+      <div className="loader-centerpiece">
+        <Canvas camera={{ position: [0, 0, 4], fov: 45 }} style={{ width: 140, height: 140 }}>
+          <ambientLight intensity={1.5} />
+          <SpinningTorus />
+        </Canvas>
+      </div>
+      <div className="boot-sequence">
+        {step >= 0 && <div>INITIALIZING SYSTEMS...</div>}
+        {step >= 1 && step < 3 && <div>{progressBar} {progress.toFixed(0)}%</div>}
+        {step >= 2 && step < 3 && <div>LOADING ASSETS...</div>}
+        {step >= 3 && <div className="sys-online">SYSTEMS ONLINE</div>}
+        <div style={{ display: 'inline-block' }}>
+          {step < 3 ? '' : ''} 
+          <span className="cursor-block"></span>
+        </div>
+      </div>
     </div>
   );
 }
@@ -40,7 +94,6 @@ export default function App() {
 
   useEffect(() => {
     if (!isLoaded) return;
-    // Trigger CSS fade-in
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     // Advanced GSAP Animations
@@ -132,7 +185,9 @@ export default function App() {
   return (
     <>
       {!isLoaded && <LoadingScreen onLoaded={() => setIsLoaded(true)} />}
-      
+
+      <KoiCanvas />
+
       {/* 3D Canvas Background */}
       <div id="canvas-container" style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -1, pointerEvents: 'none', opacity: 0.7 }}>
         <Canvas camera={{ position: [0, 0, 8], fov: 45 }} dpr={[1, 1.5]}>
@@ -160,7 +215,7 @@ export default function App() {
               <div className="brand-sub">Backend &<br />Systems engineering</div>
             </div>
             <div className="statement">Transaction safe.<br />API Driven.</div>
-            <div>
+            <div className="hero-intro">
               <div className="nav-row">
                 <a href="#work">WORK</a>
                 <a href="#about">ABOUT</a>
@@ -177,7 +232,10 @@ export default function App() {
 
         <div>
           <div className="bottom-row">
-            <h1 className="headline">I BUILD SYSTEMS<br />THAT SCALE <span className="lime">SAFELY.</span></h1>
+            <div>
+              <h1 className="headline">I BUILD SYSTEMS<br />THAT SCALE <span className="lime">SAFELY.</span></h1>
+              <a href="#work" className="cta-btn sm" style={{ display: 'inline-block', marginTop: '24px' }}>View my work ↓</a>
+            </div>
             <div className="utility-bar">
               <div className="globe" aria-hidden="true"></div>
               <span id="resOut">— {resOut} —</span>

@@ -20,7 +20,7 @@ export default function FloatingShapes() {
     <>
       <ambientLight intensity={1.5} />
       <directionalLight position={[10, 10, 5]} intensity={2} color="#ffffff" />
-      <directionalLight position={[-10, -10, -5]} intensity={1.5} color="#C6FF3D" />
+      <directionalLight position={[-10, -10, -5]} intensity={1.5} color="#A4D152" />
 
       <group ref={groupRef}>
         {/* Glossy Blue Torus */}
@@ -37,6 +37,9 @@ export default function FloatingShapes() {
               anisotropy={0.1}
               color="#6FA0EF"
             />
+            <Torus args={[1, 0.4, 16, 32]} scale={1.02}>
+              <meshBasicMaterial color="#A4D152" wireframe transparent opacity={0.15} />
+            </Torus>
           </Torus>
         </Float>
 
@@ -49,8 +52,11 @@ export default function FloatingShapes() {
               roughness={0.15}
               transmission={0.9}
               ior={1.3}
-              color="#C6FF3D"
+              color="#A4D152"
             />
+            <Cylinder args={[0.8, 0.8, 2, 16]} scale={1.02}>
+              <meshBasicMaterial color="#A4D152" wireframe transparent opacity={0.15} />
+            </Cylinder>
           </Cylinder>
         </Float>
 
@@ -64,6 +70,9 @@ export default function FloatingShapes() {
               clearcoatRoughness={0.1}
               color="#0B0F19"
             />
+            <Icosahedron args={[1.2, 0]} scale={1.05}>
+              <meshBasicMaterial color="#C6FF3D" wireframe transparent opacity={0.2} />
+            </Icosahedron>
           </Icosahedron>
         </Float>
       </group>
