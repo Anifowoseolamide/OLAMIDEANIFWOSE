@@ -208,7 +208,7 @@ export const PROJECTS = {
       }
     ],
     tech: ['Django', 'Django REST Framework', 'PostgreSQL', 'Select For Update', 'JWT (SimpleJWT)', 'Paystack API', 'Django Channels'],
-    github: null
+    github: 'https://github.com/Anifowoseolamide/LiftLink'
   },
   prephive: {
     slug: 'prephive',

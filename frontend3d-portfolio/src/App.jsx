@@ -234,7 +234,10 @@ export default function App() {
           <div className="bottom-row">
             <div>
               <h1 className="headline">I BUILD SYSTEMS<br />THAT SCALE <span className="lime">SAFELY.</span></h1>
-              <a href="#work" className="cta-btn sm" style={{ display: 'inline-block', marginTop: '24px' }}>View my work ↓</a>
+              <div style={{ display: 'flex', gap: '16px', marginTop: '24px' }}>
+                <a href="#work" className="cta-btn sm">View my work ↓</a>
+                <a href="/ANIFOWOSHE_OLAMIDE_RESUME.pdf" download className="cta-btn secondary sm">Download Resume</a>
+              </div>
             </div>
             <div className="utility-bar">
               <div className="globe" aria-hidden="true"></div>
@@ -252,8 +255,8 @@ export default function App() {
       <div id="micro">
         <div className="wrap micro-row">
           <div className="reveal">Ships fast.</div>
-          <div className="reveal">Breaks nothing.</div>
-          <div className="reveal">Secures data.</div>
+          <div className="reveal">Python lover.</div>
+          <div className="reveal">Scalable systems.</div>
         </div>
       </div>
 
@@ -304,6 +307,10 @@ export default function App() {
               <h3>SyncCare</h3>
               <p>A hybrid, local-first family healthcare platform providing personalized medical guidance and autonomous care coordination.</p>
               <div className="work-tags"><span>React</span><span>Django</span><span>Google Gemini</span></div>
+              <div className="work-links">
+                <a href="#" target="_blank" rel="noopener noreferrer">Live Demo</a>
+                <a href="#" target="_blank" rel="noopener noreferrer">GitHub</a>
+              </div>
             </div>
             <div className="work-card group" tabIndex="0">
               <div className="work-arrow">↗</div>
@@ -311,6 +318,10 @@ export default function App() {
               <h3>RideShare</h3>
               <p>A trust-first backend for peer-to-peer ridesharing in Lagos, enabling strangers to carpool safely with a wallet-based escrow system.</p>
               <div className="work-tags"><span>Django REST</span><span>PostgreSQL</span><span>Paystack API</span></div>
+              <div className="work-links">
+                <a href="#" target="_blank" rel="noopener noreferrer">Case Study</a>
+                <a href="https://github.com/Anifowoseolamide/LiftLink" target="_blank" rel="noopener noreferrer">GitHub</a>
+              </div>
             </div>
             <div className="work-card group" tabIndex="0">
               <div className="work-arrow">↗</div>
@@ -318,6 +329,10 @@ export default function App() {
               <h3>LagosCP</h3>
               <p>An AI-powered criminal identification and geographic intelligence backend with biometric facial recognition for law enforcement.</p>
               <div className="work-tags"><span>Face++ API</span><span>Cloudinary</span><span>React</span></div>
+              <div className="work-links">
+                <a href="#" target="_blank" rel="noopener noreferrer">Live Demo</a>
+                <a href="https://github.com/Anifowoseolamide/crime_profiling" target="_blank" rel="noopener noreferrer">GitHub</a>
+              </div>
             </div>
             <div className="work-card group" tabIndex="0">
               <div className="work-arrow">↗</div>
@@ -325,6 +340,53 @@ export default function App() {
               <h3>Tidal (Scriva)</h3>
               <p>Async handwriting OCR and automated LLM exam scoring backend built for the 2026 OPay Hackathon.</p>
               <div className="work-tags"><span>Django</span><span>Celery</span><span>LLM Grading API</span></div>
+              <div className="work-links">
+                <a href="#" target="_blank" rel="noopener noreferrer">GitHub</a>
+              </div>
+            </div>
+            
+            <div className="work-card group" tabIndex="0">
+              <div className="work-arrow">↗</div>
+              <span className="work-num">05</span>
+              <h3>PetrolLink</h3>
+              <p>Digital twin simulation and real-time intelligent analysis engine built for the Nexus Hackathon Epe (2nd Place Winner).</p>
+              <div className="work-tags"><span>Python</span><span>Django</span><span>Stochastic Simulation</span></div>
+              <div className="work-links">
+                <a href="#" target="_blank" rel="noopener noreferrer">Live Demo</a>
+              </div>
+            </div>
+
+            <div className="work-card group" tabIndex="0">
+              <div className="work-arrow">↗</div>
+              <span className="work-num">06</span>
+              <h3>PrepHive</h3>
+              <p>A CBT exam platform built for real exam-day pressure with live timers and performance tracking.</p>
+              <div className="work-tags"><span>Django</span><span>PostgreSQL</span><span>Bootstrap</span></div>
+              <div className="work-links">
+                <a href="https://github.com/Anifowoseolamide/prephive_premium" target="_blank" rel="noopener noreferrer">GitHub</a>
+              </div>
+            </div>
+
+            <div className="work-card group" tabIndex="0">
+              <div className="work-arrow">↗</div>
+              <span className="work-num">07</span>
+              <h3>GeekSpace</h3>
+              <p>Keeping a campus in sync — announcements, resources, and people via a comprehensive web platform.</p>
+              <div className="work-tags"><span>Django 5</span><span>PostgreSQL</span><span>Tailwind CSS</span></div>
+              <div className="work-links">
+                <a href="https://github.com/Anifowoseolamide/Geekspace" target="_blank" rel="noopener noreferrer">GitHub</a>
+              </div>
+            </div>
+
+            <div className="work-card group" tabIndex="0">
+              <div className="work-arrow">↗</div>
+              <span className="work-num">08</span>
+              <h3>DineEase</h3>
+              <p>Reservations and menus for a modern restaurant, without the front desk.</p>
+              <div className="work-tags"><span>Django</span><span>PostgreSQL</span><span>Bootstrap</span></div>
+              <div className="work-links">
+                <a href="https://github.com/Anifowoseolamide/DineEase" target="_blank" rel="noopener noreferrer">GitHub</a>
+              </div>
             </div>
           </div>
         </div>
@@ -362,7 +424,7 @@ export default function App() {
           <button className="cta-btn reveal" id="contactBtn" onClick={() => window.location.href = 'mailto:olamideanifowoshe2004@gmail.com'}>Say hi</button>
           <div className="footer-links reveal">
             <a href="https://github.com/Anifowoseolamide" target="_blank" rel="noopener noreferrer">GitHub</a>
-            <a href="#" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+            <a href="https://www.linkedin.com/in/olamide-anifowose?utm_source=share_via&utm_content=profile&utm_medium=member_android" target="_blank" rel="noopener noreferrer">LinkedIn</a>
             <a href="mailto:olamideanifowoshe2004@gmail.com">Email</a>
           </div>
           <div className="footer-utility reveal">

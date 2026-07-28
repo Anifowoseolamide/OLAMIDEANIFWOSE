@@ -169,7 +169,7 @@ document.addEventListener('DOMContentLoaded', () => {
       lines.forEach((line, index) => {
         setTimeout(() => {
           line.classList.add('visible');
-        }, 820 * (index + 1));
+        }, 200 * (index + 1));
       });
 
       const finishBoot = () => {
@@ -177,7 +177,7 @@ document.addEventListener('DOMContentLoaded', () => {
         sessionStorage.setItem('booted_v1', 'true');
       };
 
-      const bootTimer = setTimeout(finishBoot, 6000);
+      const bootTimer = setTimeout(finishBoot, 1500);
 
       bootLoader.addEventListener('click', () => {
         clearTimeout(bootTimer);

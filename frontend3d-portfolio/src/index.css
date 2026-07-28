@@ -151,10 +151,10 @@ button:focus-visible,
 
 .nav-row {
   display: flex;
-  gap: 26px;
+  gap: 32px;
   justify-content: flex-end;
   font-family: var(--mono);
-  font-size: 12px;
+  font-size: 15px;
   letter-spacing: 0.06em;
   color: var(--muted);
 }
@@ -165,11 +165,11 @@ button:focus-visible,
 
 .intro {
   font-family: var(--mono);
-  font-size: 12.5px;
+  font-size: 15px;
   color: var(--muted);
   text-align: right;
-  margin-top: 16px;
-  max-width: 340px;
+  margin-top: 18px;
+  max-width: 480px;
   margin-left: auto;
 }
 
@@ -772,4 +772,82 @@ h2 {
 @keyframes blink {
   0%, 100% { opacity: 1; }
   50% { opacity: 0; }
+}
+
+.cta-btn.secondary {
+  background: transparent;
+  border: 1px solid var(--muted);
+  color: var(--ink);
+}
+
+.cta-btn.secondary:hover {
+  border-color: var(--lime);
+  color: var(--lime);
+}
+
+.work-links {
+  display: flex;
+  gap: 16px;
+  margin-top: 20px;
+}
+
+.work-links a {
+  font-family: var(--mono);
+  font-size: 13px;
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  text-decoration-color: rgba(244, 249, 255, 0.2);
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+/* Add a glowing light under clickables on hover */
+a:hover, .work-links a:hover {
+  text-shadow: 0 0 10px rgba(164, 209, 82, 0.6);
+  text-decoration-color: var(--lime);
+}
+
+.cta-btn {
+  border: 1px solid transparent;
+}
+
+.cta-btn:hover {
+  box-shadow: 0 4px 20px rgba(164, 209, 82, 0.3);
+}
+
+.hero-intro {
+  /* Scrim removed as requested */
+}
+
+.hero-intro .nav-row a {
+  position: relative;
+  text-decoration: none !important;
+  opacity: 0.9;
+}
+
+/* Light under the nav bar so they know what it is */
+.hero-intro .nav-row a::after {
+  content: '';
+  position: absolute;
+  bottom: -6px;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--lime);
+  box-shadow: 0 0 10px var(--lime);
+  transform: scaleX(0);
+  transform-origin: right;
+  transition: transform 0.3s ease;
+}
+
+.hero-intro .nav-row a:hover::after,
+.hero-intro .nav-row a.active::after {
+  transform: scaleX(1);
+  transform-origin: left;
+}
+
+.hero-intro .intro {
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.5);
 }
