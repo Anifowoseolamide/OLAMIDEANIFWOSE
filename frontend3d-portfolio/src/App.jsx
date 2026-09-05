@@ -1,41 +1,30 @@
 import { useEffect, useRef, useState } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
-import { Environment, useProgress } from '@react-three/drei';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import FloatingShapes from './canvas/FloatingShapes';
-import KoiCanvas from './canvas/BoidsCanvas';
 
 gsap.registerPlugin(ScrollTrigger);
 
-function SpinningTorus() {
-  const ref = useRef();
-  useFrame(() => {
-    if (ref.current) {
-      ref.current.rotation.x += 0.01;
-      ref.current.rotation.y += 0.02;
-    }
-  });
-  return (
-    <group ref={ref} rotation={[Math.PI / 4, Math.PI / 4, 0]}>
-      <mesh>
-        <torusGeometry args={[1, 0.3, 16, 32]} />
-        <meshBasicMaterial color="#0B0F19" />
-      </mesh>
-      <mesh>
-        <torusGeometry args={[1, 0.31, 16, 32]} />
-        <meshBasicMaterial color="#A4D152" wireframe transparent opacity={0.6} />
-      </mesh>
-    </group>
-  );
-}
-
 function LoadingScreen({ onLoaded }) {
-  const { progress } = useProgress();
+  const [progress, setProgress] = useState(0);
   const [step, setStep] = useState(0); 
   const [hidden, setHidden] = useState(false);
   
   const [minTimeElapsed, setMinTimeElapsed] = useState(false);
+
+  useEffect(() => {
+    // Simulate loading progress
+    const interval = setInterval(() => {
+      setProgress((p) => {
+        if (p >= 100) {
+          clearInterval(interval);
+          return 100;
+        }
+        return p + Math.floor(Math.random() * 15) + 5;
+      });
+    }, 150);
+    return () => clearInterval(interval);
+  }, []);
+
   useEffect(() => {
     const t = setTimeout(() => setMinTimeElapsed(true), 1200);
     return () => clearTimeout(t);
@@ -45,7 +34,7 @@ function LoadingScreen({ onLoaded }) {
     let t;
     if (step === 0) {
       t = setTimeout(() => setStep(1), 300);
-    } else if (step === 1 && progress === 100 && minTimeElapsed) {
+    } else if (step === 1 && progress >= 100 && minTimeElapsed) {
       setStep(2);
     } else if (step === 2) {
       t = setTimeout(() => setStep(3), 500);
@@ -58,21 +47,18 @@ function LoadingScreen({ onLoaded }) {
     return () => clearTimeout(t);
   }, [step, progress, minTimeElapsed, onLoaded]);
 
-  const bars = Math.floor(progress / 10);
+  const bars = Math.floor(Math.min(progress, 100) / 10);
   const progressBar = '[' + '■'.repeat(bars) + '□'.repeat(10 - bars) + ']';
 
   return (
     <div className={`loader-overlay ${hidden ? 'hidden-up' : ''}`}>
       <div className="loader-bg-stars" />
       <div className="loader-centerpiece">
-        <Canvas camera={{ position: [0, 0, 4], fov: 45 }} style={{ width: 140, height: 140 }}>
-          <ambientLight intensity={1.5} />
-          <SpinningTorus />
-        </Canvas>
+        <div className="css-spinner"></div>
       </div>
       <div className="boot-sequence">
         {step >= 0 && <div>INITIALIZING SYSTEMS...</div>}
-        {step >= 1 && step < 3 && <div>{progressBar} {progress.toFixed(0)}%</div>}
+        {step >= 1 && step < 3 && <div>{progressBar} {Math.min(progress, 100).toFixed(0)}%</div>}
         {step >= 2 && step < 3 && <div>LOADING ASSETS...</div>}
         {step >= 3 && <div className="sys-online">SYSTEMS ONLINE</div>}
         <div style={{ display: 'inline-block' }}>
@@ -186,14 +172,9 @@ export default function App() {
     <>
       {!isLoaded && <LoadingScreen onLoaded={() => setIsLoaded(true)} />}
 
-      <KoiCanvas />
-
-      {/* 3D Canvas Background */}
-      <div id="canvas-container" style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -1, pointerEvents: 'none', opacity: 0.7 }}>
-        <Canvas camera={{ position: [0, 0, 8], fov: 45 }} dpr={[1, 1.5]}>
-          <FloatingShapes />
-          <Environment preset="city" />
-        </Canvas>
+      {/* Lightweight CSS Background Overlay */}
+      <div id="css-bg-container" style={{ position: 'fixed', top: 0, left: 0, width: '100vw', height: '100vh', zIndex: -1, pointerEvents: 'none' }}>
+        <div className="subtle-animated-gradient"></div>
       </div>
 
       <section id="hero" ref={heroRef} className={isLoaded ? 'loaded' : ''}>
